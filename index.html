@@ -1,175 +1,144 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Гра «Однорукий бандит»</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 0;
-    }
-
-    h1 {
-      margin-top: 20px;
-      color: #222;
-    }
-
-    .info {
-      margin: 10px 0;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .machine {
-      display: flex;
-      justify-content: center;
-      background-color: #6a6acb;
-      border-radius: 10px;
-      margin: 20px auto;
-      width: 320px;
-      padding: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-    }
-
-    .column {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin: 5px;
-      background-color: #8a88e5;
-      border-radius: 8px;
-      padding: 5px;
-    }
-
-    .column img {
-      width: 80px;
-      height: 80px;
-      margin: 3px;
-      border-radius: 8px;
-      background-color: white;
-      border: 2px solid #333;
-    }
-
-    #generateBtn {
-      background-color: lime;
-      border: none;
-      color: black;
-      font-size: 22px;
-      font-weight: bold;
-      padding: 10px 30px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    #generateBtn:hover {
-      background-color: #00ff00;
-      transform: scale(1.05);
-    }
-
-    #result {
-      margin-top: 15px;
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    @media (max-width: 600px) {
-      .machine {
-        width: 90%;
-        flex-direction: column;
-      }
-
-      .column {
-        flex-direction: row;
-      }
-
-      .column img {
-        width: 70px;
-        height: 70px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Learning</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(120deg, #f6f9fc, #c9e8ff);
+  text-align: center;
+  padding: 40px;
+}
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 300px;
+  margin: 0 auto;
+}
+input {
+  margin-top: 10px;
+  padding: 10px;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #357ab7;
+}
+#stats {
+  margin-top: 20px;
+  font-weight: bold;
+}
+#modal {
+  display: none;
+  position: fixed;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+#modal-content {
+  background: white;
+  margin: 15% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 300px;
+}
+@media (max-width: 500px) {
+  .card, #modal-content { width: 90%; }
+}
+</style>
 </head>
 <body>
-  <h1>Гра «Однорукий бандит»</h1>
-  <div id="userInfo" class="info"></div>
-  <div id="attemptInfo" class="info"></div>
-  <button id="generateBtn">Generate</button>
-  <div class="machine" id="machine">
-    <div class="column" id="col1"></div>
-    <div class="column" id="col2"></div>
-    <div class="column" id="col3"></div>
+
+<h1>Language Learning App</h1>
+<div class="card">
+  <p id="word"></p>
+  <input type="text" id="answer" placeholder="Введіть переклад">
+  <button id="check">Перевірити</button>
+  <p id="progress"></p>
+</div>
+
+<div id="stats">
+   Правильно: <span id="correct">0</span> |
+   Неправильно: <span id="wrong">0</span>
+</div>
+
+<div id="modal">
+  <div id="modal-content">
+    <h2>Ваш рівень</h2>
+    <p id="result"></p>
+    <button id="close">Закрити</button>
   </div>
+</div>
 
-  <p id="result"></p>
+<script>
+$(document).ready(function() {
+  const words = [
+    {en: "apple", ua: "яблуко"},
+    {en: "sun", ua: "сонце"},
+    {en: "book", ua: "книга"},
+    {en: "water", ua: "вода"},
+    {en: "dog", ua: "собака"},
+    {en: "friend", ua: "друг"},
+    {en: "city", ua: "місто"},
+    {en: "home", ua: "дім"},
+    {en: "love", ua: "кохання"},
+    {en: "music", ua: "музика"}
+  ];
 
-  <script>
-    const fruits = [
-      { name: "apple", url: "https://static.vecteezy.com/system/resources/previews/029/228/596/non_2x/apple-transparent-background-free-png.png" },
-      { name: "pear", url: "https://wallpapers.com/images/hd/single-pear-png-kbr-iwmg9f0w0u4ajzo2.jpg" },
-      { name: "lemon", url: "https://images.rawpixel.com/image_png_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHgxMDQ3NDEyLWltYWdlLWpvYjYyMV8yLnBuZw.png" },
-      { name: "cherry", url: "https://pngimg.com/uploads/cherry/small/cherry_PNG635.png" },
-      { name: "peach", url: "https://toppng.com/uploads/preview/peach-11528328794p5ukzuatl1.png" }
-    ];
+  const shuffled = words.sort(() => 0.5 - Math.random());
+  let index = 0, correct = 0, wrong = 0;
 
-    let name;
-    do {
-      name = prompt("Введіть ваше ім’я:");
-    } while (!name || name.trim().length < 2);
-
-    const userInfo = document.getElementById("userInfo");
-    const attemptInfo = document.getElementById("attemptInfo");
-    const result = document.getElementById("result");
-    const btn = document.getElementById("generateBtn");
-    const cols = [document.getElementById("col1"), document.getElementById("col2"), document.getElementById("col3")];
-
-    let attempt = 0;
-    const maxAttempts = 3;
-
-    userInfo.textContent = `Гравець: ${name}`;
-    attemptInfo.textContent = `Спроба ${attempt} з ${maxAttempts}`;
-
-    function shuffleColumn(column) {
-      column.innerHTML = "";
-      const used = new Set();
-      while (used.size < 3) {
-        const fruit = fruits[Math.floor(Math.random() * fruits.length)];
-        if (!used.has(fruit.name)) {
-          used.add(fruit.name);
-          const img = document.createElement("img");
-          img.src = fruit.url;
-          img.alt = fruit.name;
-          column.appendChild(img);
-        }
-      }
+  function showWord() {
+    if (index < shuffled.length) {
+      $("#word").text(shuffled[index].en);
+      $("#progress").text(`${index+1} / ${shuffled.length}`);
+      $("#answer").val("").focus();
+    } else {
+      let level;
+      const percent = (correct / shuffled.length) * 100;
+      if (percent >= 90) level = "Advanced ";
+      else if (percent >= 70) level = "Intermediate ";
+      else level = "Beginner ";
+      $("#result").html(`Ваш результат: ${percent.toFixed(0)}%<br>${level}`);
+      $("#modal").fadeIn();
     }
+  }
 
-    function generate() {
-      if (attempt >= maxAttempts) return;
-
-      attempt++;
-      attemptInfo.textContent = `Спроба ${attempt} з ${maxAttempts}`;
-      cols.forEach(col => shuffleColumn(col));
-      const topRow = cols.map(col => col.children[0].alt);
-      if (topRow.every(fruit => fruit === topRow[0])) {
-        result.textContent = `Вітаємо, ${name}! Ви виграли!`;
-        btn.disabled = true;
-        btn.style.backgroundColor = "gray";
-      } else if (attempt === maxAttempts) {
-        result.textContent = `${name}, ви програли!`;
-        btn.disabled = true;
-        btn.style.backgroundColor = "gray";
-      } else {
-        result.textContent = "";
-      }
+  $("#check").click(function() {
+    const input = $("#answer").val().trim().toLowerCase();
+    if (input === "") {
+      alert("Введіть переклад!");
+      return;
     }
-    btn.addEventListener("click", generate);
-    cols.forEach(col => shuffleColumn(col));
-  </script>
+    if (input === shuffled[index].ua) {
+      correct++;
+      $("#correct").text(correct);
+    } else {
+      wrong++;
+      $("#wrong").text(wrong);
+    }
+    index++;
+    showWord();
+  });
+
+  $("#close").click(() => $("#modal").fadeOut());
+  showWord();
+});
+</script>
 </body>
 </html>
