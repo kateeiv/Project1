@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Learning</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(120deg, #f6f9fc, #c9e8ff);
+  text-align: center;
+  padding: 40px;
+}
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 300px;
+  margin: 0 auto;
+}
+input {
+  margin-top: 10px;
+  padding: 10px;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #357ab7;
+}
+#stats {
+  margin-top: 20px;
+  font-weight: bold;
+}
+#modal {
+  display: none;
+  position: fixed;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+#modal-content {
+  background: white;
+  margin: 15% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 300px;
+}
+@media (max-width: 500px) {
+  .card, #modal-content { width: 90%; }
+}
+</style>
+</head>
+<body>
+
+<h1>Language Learning App</h1>
+<div class="card">
+  <p id="word"></p>
+  <input type="text" id="answer" placeholder="Введіть переклад">
+  <button id="check">Перевірити</button>
+  <p id="progress"></p>
+</div>
+
+<div id="stats">
+   Правильно: <span id="correct">0</span> |
+   Неправильно: <span id="wrong">0</span>
+</div>
+
+<div id="modal">
+  <div id="modal-content">
+    <h2>Ваш рівень</h2>
+    <p id="result"></p>
+    <button id="close">Закрити</button>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+  const words = [
+    {en: "apple", ua: "яблуко"},
+    {en: "sun", ua: "сонце"},
+    {en: "book", ua: "книга"},
+    {en: "water", ua: "вода"},
+    {en: "dog", ua: "собака"},
+    {en: "friend", ua: "друг"},
+    {en: "city", ua: "місто"},
+    {en: "home", ua: "дім"},
+    {en: "love", ua: "кохання"},
+    {en: "music", ua: "музика"}
+  ];
+
+  const shuffled = words.sort(() => 0.5 - Math.random());
+  let index = 0, correct = 0, wrong = 0;
+
+  function showWord() {
+    if (index < shuffled.length) {
+      $("#word").text(shuffled[index].en);
+      $("#progress").text(`${index+1} / ${shuffled.length}`);
+      $("#answer").val("").focus();
+    } else {
+      let level;
+      const percent = (correct / shuffled.length) * 100;
+      if (percent >= 90) level = "Advanced ";
+      else if (percent >= 70) level = "Intermediate ";
+      else level = "Beginner ";
+      $("#result").html(`Ваш результат: ${percent.toFixed(0)}%<br>${level}`);
+      $("#modal").fadeIn();
+    }
+  }
+
+  $("#check").click(function() {
+    const input = $("#answer").val().trim().toLowerCase();
+    if (input === "") {
+      alert("Введіть переклад!");
+      return;
+    }
+    if (input === shuffled[index].ua) {
+      correct++;
+      $("#correct").text(correct);
+    } else {
+      wrong++;
+      $("#wrong").text(wrong);
+    }
+    index++;
+    showWord();
+  });
+
+  $("#close").click(() => $("#modal").fadeOut());
+  showWord();
+});
+</script>
+</body>
+</html>
