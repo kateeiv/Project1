@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>В кого більше число</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #74b9ff, #a29bfe);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .game {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 20px 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .scores {
+      display: flex;
+      justify-content: space-around;
+      margin: 15px 0;
+      font-size: 1.1rem;
+    }
+
+    button {
+      background: #6c5ce7;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #341f97;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      min-height: 30px;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Гра: В кого більше число</h1>
+  <div class="game">
+    <p id="player-name"></p>
+    <div class="scores">
+      <span id="player-score">0</span> : <span id="computer-score">0</span>
+    </div>
+    <button id="play-btn">Кинути число </button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    let playerName = "";
+    while (!playerName) {
+      playerName = prompt("Введіть ваше ім’я:");
+      if (playerName === null) playerName = ""; // якщо натиснули "Скасувати"
+      playerName = playerName.trim();
+    }
+
+    document.getElementById("player-name").textContent = `Гравець: ${playerName}`;
+
+    let playerScore = 0;
+    let computerScore = 0;
+
+    const playerScoreEl = document.getElementById("player-score");
+    const computerScoreEl = document.getElementById("computer-score");
+    const resultEl = document.getElementById("result");
+    const playBtn = document.getElementById("play-btn");
+
+    playBtn.addEventListener("click", () => {
+      if (playerScore >= 3 || computerScore >= 3) {
+        alert("Гру завершено! Оновіть сторінку, щоб почати знову.");
+        return;
+      }
+
+      const playerNumber = Math.floor(Math.random() * 10) + 1;
+      const computerNumber = Math.floor(Math.random() * 10) + 1;
+
+      let message = `${playerName}: ${playerNumber} | Комп’ютер: ${computerNumber}<br>`;
+
+      if (playerNumber > computerNumber) {
+        playerScore++;
+        message += `${playerName} отримує бал!`;
+      } else if (playerNumber < computerNumber) {
+        computerScore++;
+        message += `Комп’ютер отримує бал!`;
+      } else {
+        message += "Нічия!";
+      }
+
+      playerScoreEl.textContent = playerScore;
+      computerScoreEl.textContent = computerScore;
+      resultEl.innerHTML = message;
+
+      if (playerScore === 3) {
+        resultEl.innerHTML += `<br><strong>${playerName} переміг!</strong>`;
+        playBtn.disabled = true;
+      } else if (computerScore === 3) {
+        resultEl.innerHTML += `<br><strong>Комп’ютер переміг!</strong>`;
+        playBtn.disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>
+ 
