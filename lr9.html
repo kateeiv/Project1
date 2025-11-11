@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Гра «21» — картки</title>
+  <style>
+    body{font-family:Arial, sans-serif;background:#f3f6f9;color:#0b1220;padding:20px;display:flex;justify-content:center}
+    .game{width:900px;max-width:95%;background:white;border-radius:8px;padding:18px;box-shadow:0 6px 20px rgba(20,30,60,0.12)}
+    .row{display:flex;align-items:center;justify-content:space-between}
+    .panel{width:40%;text-align:center}
+    .title{font-weight:700;margin-bottom:8px}
+    .score{background:#06a6f0;color:white;padding:6px 12px;border-radius:8px;display:inline-block;margin-bottom:12px}
+    .card-spot{height:220px;display:flex;align-items:center;justify-content:center}
+
+    /* simple card rendering */
+    .card{width:140px;height:200px;border-radius:10px;background:white;border:1px solid #ddd;box-shadow:0 6px 18px rgba(12,20,40,0.08);display:flex;flex-direction:column;justify-content:space-between;padding:10px}
+    .card .corner{font-weight:700;font-size:18px}
+    .card .center{font-size:78px;line-height:1;display:flex;align-items:center;justify-content:center}
+    .controls{display:flex;flex-direction:column;align-items:center;gap:8px}
+    button.generate{background:#00d05a;border:none;padding:14px 28px;border-radius:8px;font-weight:800;cursor:pointer}
+    .attempt{margin-bottom:8px}
+    .result{margin-top:12px;font-weight:700;text-align:center}
+
+    @media(max-width:700px){
+      .row{flex-direction:column}
+      .panel{width:100%;margin-bottom:12px}
+      .card{width:120px;height:170px}
+      .card .center{font-size:56px}
+    }
+  </style>
+</head>
+<body>
+  <div class="game">
+    <div class="row">
+      <div class="panel">
+        <div class="title">User</div>
+        <div class="score" id="playerScore">0</div>
+        <div class="card-spot"><div id="playerCard"></div></div>
+      </div>
+
+      <div class="controls">
+        <div class="attempt" id="attemptText">Спроба 0 з 3</div>
+        <button class="generate" id="generate">Generate</button>
+        <div class="result" id="resultBox"></div>
+      </div>
+
+      <div class="panel">
+        <div class="title">Computer</div>
+        <div class="score" id="computerScore">0</div>
+        <div class="card-spot"><div id="computerCard"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    const suits = [ {sym:'\u2665',name:'hearts',color:'red'}, {sym:'\u2666',name:'diamonds',color:'red'}, {sym:'\u2660',name:'spades',color:'black'}, {sym:'\u2663',name:'clubs',color:'black'} ];
+
+    function cardValue(rank){
+      if(rank === 'A') return 1;
+      if(rank === 'J' || rank === 'Q' || rank === 'K') return 10;
+      return Number(rank);
+    }
+    function randomChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+    function drawRandomCard(){
+      const rank = randomChoice(ranks);
+      const suit = randomChoice(suits);
+      return {rank, suit, value: cardValue(rank)};
+    }
+    function renderCard(card){
+      const cont = document.createElement('div');
+      cont.className = 'card';
+      const colorStyle = card.suit.color === 'red' ? 'color:#c0392b' : 'color:#2c3e50';
+      cont.innerHTML = `
+        <div class="corner" style="${colorStyle}">${card.rank}<br><span style="font-size:14px">${card.suit.sym}</span></div>
+        <div class="center" style="${colorStyle}">${card.suit.sym}</div>
+        <div class="corner" style="${colorStyle};transform:rotate(180deg)">${card.rank}<br><span style="font-size:14px">${card.suit.sym}</span></div>
+      `;
+      return cont;
+    }
+    const playerScoreEl = document.getElementById('playerScore');
+    const computerScoreEl = document.getElementById('computerScore');
+    const playerCardEl = document.getElementById('playerCard');
+    const computerCardEl = document.getElementById('computerCard');
+    const attemptText = document.getElementById('attemptText');
+    const generateBtn = document.getElementById('generate');
+    const resultBox = document.getElementById('resultBox');
+
+    let playerSum = 0;
+    let computerSum = 0;
+    let round = 0;
+    const maxRounds = 3;
+
+    function resetIfDone(){
+      if(round >= maxRounds){
+        generateBtn.disabled = true;
+      }
+    }
+    function updateScores(){
+      playerScoreEl.textContent = playerSum;
+      computerScoreEl.textContent = computerSum;
+      attemptText.textContent = `Спроба ${Math.min(round, maxRounds)} з ${maxRounds}`;
+    }
+
+    function clearCards(){ playerCardEl.innerHTML = ''; computerCardEl.innerHTML = ''; }
+    generateBtn.addEventListener('click', ()=>{
+      if(round >= maxRounds) return;
+      round++;
+      clearCards();
+
+      const pCard = drawRandomCard();
+      const cCard = drawRandomCard();
+
+      playerSum += pCard.value;
+      computerSum += cCard.value;
+
+      playerCardEl.appendChild(renderCard(pCard));
+      computerCardEl.appendChild(renderCard(cCard));
+
+      updateScores();
+
+      if(round === maxRounds){
+        let msg = '';
+        if(playerSum > computerSum) msg = `User переміг! (${playerSum} : ${computerSum})`;
+        else if(playerSum < computerSum) msg = `Computer переміг! (${computerSum} : ${playerSum})`;
+        else msg = `Нічия (${playerSum} : ${computerSum})`;
+        resultBox.textContent = msg;
+        resetIfDone();
+      }
+    });
+    resultBox.addEventListener('dblclick', ()=>{
+      playerSum = 0; computerSum = 0; round = 0; resultBox.textContent = ''; clearCards(); generateBtn.disabled = false; updateScores();
+    });
+    updateScores();
+  </script>
+</body>
+</html>
