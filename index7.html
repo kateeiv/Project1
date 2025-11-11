@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Магічна куля — Лабораторна</title>
+</head>
+<body>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const answers = ["Так", "Ні", "Можливо", "Запитай пізніше", "Без сумнівів", "Малоймовірно"];
+  const container = document.createElement('div');
+  Object.assign(container.style, {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '20px',
+    fontFamily: 'Arial, sans-serif',
+    background: '#071026',
+    color: '#fff',
+    margin: '0'
+  });
+  const question = document.createElement('div');
+  question.textContent = 'Чи буде завтра сонячно?';
+  Object.assign(question.style, {
+    background: '#e7d6ff',
+    color: '#1b0b2b',
+    padding: '10px 18px',
+    borderRadius: '22px',
+    marginBottom: '18px',
+    fontWeight: '700'
+  });
+  container.appendChild(question);
+  const ball = document.createElement('div');
+  Object.assign(ball.style, {
+    width: '320px',
+    height: '320px',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+    cursor: 'pointer',
+    boxShadow: '0 6px 30px rgba(0,0,0,0.6)',
+  });
+  const img = document.createElement('img');
+  img.src = 'ball.jpg'; 
+  img.alt = 'Магічна куля';
+  Object.assign(img.style, {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+    userSelect: 'none',
+    pointerEvents: 'none'
+  });
+  ball.appendChild(img);
+  const label = document.createElement('div');
+  label.textContent = 'Натисни!';
+  Object.assign(label.style, {
+    position: 'absolute',
+    inset: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    padding: '12px',
+    fontSize: '28px',
+    fontWeight: '700',
+    pointerEvents: 'none',
+    color: '#fff',
+    textShadow: '0 2px 6px rgba(0,0,0,0.7)'
+  });
+  ball.appendChild(label);
+
+  container.appendChild(ball);
+  const controls = document.createElement('div');
+  Object.assign(controls.style, { marginTop: '14px', display: 'flex', gap: '8px', alignItems: 'center' });
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Введіть своє питання (мінімум 3 символи)';
+  Object.assign(input.style, { padding: '8px', borderRadius: '8px', border: '0', minWidth: '220px' });
+  const askBtn = document.createElement('button');
+  askBtn.textContent = 'Запитати';
+  Object.assign(askBtn.style, { padding: '8px 12px', borderRadius: '8px', border: '0', cursor: 'pointer' });
+  controls.appendChild(input);
+  controls.appendChild(askBtn);
+  container.appendChild(controls);
+  document.body.appendChild(container);
+  function showRandomAnswer(seedText) {
+    let t = (seedText && seedText.trim().length >= 3) ? seedText.trim() : String(Math.random());
+    let h = 0;
+    for (let i = 0; i < t.length; i++) h = ((h << 5) - h) + t.charCodeAt(i), h |= 0;
+    const idx = Math.abs(h) % answers.length;
+    label.textContent = answers[idx];
+  }
+
+  ball.addEventListener('click', () => {
+    const qtext = input.value;
+    showRandomAnswer(qtext.length >= 3 ? qtext : null);
+  });
+
+  askBtn.addEventListener('click', () => {
+    const qtext = input.value;
+    if (qtext.trim().length < 3) return alert('Питання має містити мінімум 3 символи.');
+    showRandomAnswer(qtext);
+  });
+
+  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') askBtn.click(); });
+});
+</script>
+</body>
+</html>
+ 
