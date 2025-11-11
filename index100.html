@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Підсумкова робота: Меню</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <style>
+        body {
+            background-color: #f8f9fa; /* Світлий фон */
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: none; /* Прибираємо стандартні рамки */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* М'яка тінь */
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Ефект "підняття" при наведенні */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1); /* Сильніша тінь */
+        }
+        .card-header {
+            background-color: #0d6efd; /* Синій заголовок картки */
+            color: white;
+            font-weight: 500;
+            text-align: center;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px; /* Мінімальна висота для карток */
+        }
+        .card-title {
+            color: #333;
+        }
+        .btn-primary {
+            /* Градієнт для кнопки */
+            background-image: linear-gradient(to right, #0d6efd, #0a58ca);
+            border: none;
+            transition: background-image 0.3s;
+        }
+        .btn-primary:hover {
+            background-image: linear-gradient(to right, #0a58ca, #0d6efd);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">Підсумкова робота</a>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-5">Меню лабораторних робіт</h1>
+                <p class="lead text-muted">Систематизація знань, отриманих під час вивчення дисципліни.</p>
+            </div>
+        </div>
+        
+        <hr class="mb-5">
+
+        <div class="row">
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Лабораторна робота №7
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Маніпуляція CSS</h5>
+                        <p class="card-text">Керування стилями елементів за допомогою JavaScript та jQuery.</p>
+                        <a href="https://kateeiv.github.io/Project1/index7.html" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            Перейти до роботи
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Лабораторна робота №8
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Обробка подій</h5>
+                        <p class="card-text">Реалізація інтерактивності сторінки через обробники подій.</p>
+                        <a href="https://kateeiv.github.io/Project1/index8.html" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            Перейти до роботи
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Лабораторна робота №9
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Форми та валідація</h5>
+                        <p class="card-text">Робота з формами, збір даних та їх перевірка на боці клієнта.</p>
+                        <a href="https://kateeiv.github.io/Project1/index9.html" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            Перейти до роботи
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Лабораторна робота №10
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Анімація та ефекти</h5>
+                        <p class="card-text">Використання jQuery для створення анімаційних ефектів на сторінці.</p>
+                        <a href="https://kateeiv.github.io/Project1/index10.html" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            Перейти до роботи
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div> </div> <footer class="text-center text-muted p-4" style="background-color: #e9ecef;">
+        <p class="mb-0">© 2025 - Виконано в рамках вивчення дисципліни</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
